@@ -14,13 +14,12 @@ export const getFormSubmit = e => {
   inputValue = e.target.elements.query.value;
   if (inputValue.length) {
     fetchImages(inputValue, page, API_KEY)
-      .then(images => addToMarkup(images))
-      .then(
-        setTimeout(() => {
-          refs.loadMore.style.display = 'block';
-        }),
-        1000,
-      )
+      .then(images => {
+        images.length
+          ? (refs.loadMore.style.display = 'block')
+          : (refs.loadMore.style.display = 'none');
+        addToMarkup(images);
+      })
       .catch(err => console.log(err));
   }
 };
@@ -29,7 +28,6 @@ export const moreImages = () => {
   page += 1;
   fetchImages(inputValue, page, API_KEY)
     .then(images => {
-      console.log(images);
       addToMarkup(images);
       scrollTo({
         top: document.documentElement.offsetHeight - 1600,
